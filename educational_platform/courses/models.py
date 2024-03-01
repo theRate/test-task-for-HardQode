@@ -1,24 +1,48 @@
+from django.contrib.auth.models import User
 from django.db import models
-from rest_framework.authtoken.admin import User
 
 
 # Create your models here.
 class Product(models.Model):
+    """Сущность продукта"""
     author = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='Автор/преподаватель')
-    title = models.CharField(max_length=128, blank=False, verbose_name='Название продукта')
-    start_date = models.DateTimeField(blank=False, verbose_name='Дата старта')
-    price = models.DecimalField(max_digits=8, decimal_places=2, blank=False, verbose_name='Цена')
-    min_group_users = models.PositiveIntegerField(default=5, verbose_name='Min учащихся в группе')
-    max_group_users = models.PositiveIntegerField(default=50, verbose_name='Max учащихся в группе')
+    title = models.CharField('Название продукта', max_length=128, blank=False)
+    start_date = models.DateTimeField('Дата старта', blank=False)
+    price = models.DecimalField('Цена', max_digits=8, decimal_places=2, blank=False)
+    min_group_users = models.PositiveIntegerField('Min учащихся в группе', default=5)
+    max_group_users = models.PositiveIntegerField('Max учащихся в группе', default=50)
+
+    class Meta:
+        verbose_name = 'Продукт'
+        verbose_name_plural = 'Продукты'
+
+    def __str__(self):
+        return self.title
 
 
 class Lesson(models.Model):
+    """Сущность урока"""
     product = models.ForeignKey(Product, on_delete=models.CASCADE, verbose_name='Продукт')
-    title = models.CharField(max_length=128, blank=False, verbose_name='Название урока')
-    url = models.URLField(max_length=256, blank=False, verbose_name='Ссылка на видео')
+    title = models.CharField('Название урока', max_length=128, blank=False)
+    url = models.URLField('Ссылка на видео', max_length=256, blank=False)
+
+    class Meta:
+        verbose_name = 'Урок'
+        verbose_name_plural = 'Уроки'
+
+    def __str__(self):
+        return self.title
 
 
 class Group(models.Model):
+    """Сущность группы"""
     product = models.ForeignKey(Product, on_delete=models.CASCADE, verbose_name='Продукт')
-    members = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, verbose_name='Участники')
-    title = models.CharField(max_length=128, blank=False, verbose_name='Название группы')
+    members = models.ManyToManyField(User, blank=True, verbose_name='Участники')
+    title = models.CharField('Название группы', max_length=128, blank=False)
+
+    class Meta:
+        verbose_name = 'Учебная группа'
+        verbose_name_plural = 'Учебные группы'
+
+    def __str__(self):
+        return self.title
