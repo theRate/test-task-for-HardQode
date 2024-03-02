@@ -21,12 +21,25 @@ class Product(models.Model):
         return self.title
 
 
+class Access(models.Model):
+    """Сущность доступа к продукту"""
+    member = models.ForeignKey(User, blank=False, on_delete=models.CASCADE, verbose_name='Доступен пользователю')
+    product = models.ForeignKey(Product, blank=False, on_delete=models.CASCADE, verbose_name='Доступен продукт')
+
+    class Meta:
+        verbose_name = 'Доступ к продукту'
+        verbose_name_plural = 'Доступы к продуктам'
+
+    def __str__(self):
+        return f'{self.member} --> {self.product}'
+
+
 class Lesson(models.Model):
     """Сущность урока"""
     title = models.CharField('Название урока', max_length=128, blank=False)
     url = models.URLField('Ссылка на видео', max_length=256, blank=False)
 
-    product = models.ForeignKey(Product, on_delete=models.CASCADE, verbose_name='Продукт')
+    product = models.ForeignKey(Product, blank=False, on_delete=models.CASCADE, verbose_name='Продукт')
 
     class Meta:
         verbose_name = 'Урок'

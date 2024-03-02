@@ -1,20 +1,24 @@
 from rest_framework import generics
 
-from .models import Product, Lesson, Group
-from .serializers import ProductSerializer, LessonSerializer, GroupSerializer
+from .serializers import *
 
 
 # Create your views here.
-class ProductAPIView(generics.ListAPIView):
+class ProductAPIView(generics.ListCreateAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
 
 
-class LessonAPIView(generics.ListAPIView):
+class AccessAPIView(generics.ListCreateAPIView):
+    queryset = Access.objects.all()
+    serializer_class = AccessSerializer
+
+
+class LessonAPIView(generics.ListCreateAPIView):
     queryset = Lesson.objects.all()
     serializer_class = LessonSerializer
 
 
-class GroupAPIView(generics.ListAPIView):
+class GroupAPIView(generics.ListCreateAPIView):
     queryset = Group.objects.all()
     serializer_class = GroupSerializer
